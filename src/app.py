@@ -1,22 +1,28 @@
-from flask import Flask, request, jsonify
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
 
-app = Flask(__name__)
+# initialize app
+app = Dash()
+
+# app layout
+app.layout = [
+    html.Div(className='row', children='Self-employment Income Tax', style={'textAlign': 'center', 'fontSize': 30}),
+    html.Div(className='row', children=[
+        dcc.Input(id='daily-rate', type='number', min=0, value=500), 
+        dcc.Input(id='days-worked', type='number', min=0, value=220)
+        ]),
+    html.Div(id='yearly-income')
+]
+
+@callback(
+    Output(component_id='yearly-income', component_property='children'),
+    Input(component_id='daily-rate', component_property='value'),
+    Input(component_id='days-worked', component_property='value'),
+)
+def update_income(daily_rate, days_worked):
+    yearly_income = daily_rate * days_worked
+    return yearly_income
 
 
-@app.route('/')
-def index():
-    return "<p>Hello, World!<p>"
-
-@app.route('/calculate', methods=['POST'])
-def calculate():
-    req_data = request.get_json()
-    daily_rate = req_data['daily_rate']
-    days_worked = req_data['days_worked']
-    return jsonify({
-        'daily_rate': daily_rate,
-        'days_worked': days_worked,
-        'revenue': daily_rate * days_worked
-    })
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
