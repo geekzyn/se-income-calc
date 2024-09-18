@@ -8,10 +8,10 @@ app = Dash()
 app.layout = [
     html.Div(className='row', children='Self-employment Income Tax', style={'textAlign': 'center', 'fontSize': 30}),
     html.Div(className='row', children=[
-        dcc.Input(id='daily-rate', type='number', min=0, value=500), 
-        dcc.Input(id='days-worked', type='number', min=0, value=220)
-        ]),
-    html.Div(id='yearly-income')
+        html.Div(className='column input', children=[html.Label('Daily rate: '), dcc.Input(id='daily-rate', type='number', min=0, value=500)]),
+        html.Div(className='column input', children=[html.Label('Days worked: '), dcc.Input(id='days-worked', type='number', min=0, value=220)]),
+        ], style={'display': 'flex', 'flexDirection': 'column'}),
+    html.Div(className='row', children=[html.Label('Yearly income: '), html.Div(id='yearly-income')], style={'display': 'flex', 'margin-top': '20px'})
 ]
 
 @callback(
